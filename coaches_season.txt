@@ -1,4 +1,4 @@
-coachid year yr_order firstname lastname season_win season_loss playoff_win playoff_loss team
+coachid,year,yr_order,firstname,lastname,season_win,season_loss,playoff_win,playoff_loss,team
 RUSSEJO01 ,1946,1,John,Russell,22,38,0,0,BOS
 OLSENHA01 ,1946,1,Harold,Olsen,39,22,5,6,CH1
 DEHNEDU01 ,1946,1,Dutch,Dehnert,17,20,0,0,CL1

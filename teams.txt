@@ -1,4 +1,4 @@
-team location name league
+team,location,name,leag
 ANA,Anaheim,Amigos,A
 AND,Anderson,Duffey Packers,N
 ATL,Atlanta,Hawks,N

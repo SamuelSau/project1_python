@@ -1,3 +1,4 @@
+import sys
 
 '''
 By: Samuel Sau
@@ -11,11 +12,16 @@ Use 'help' to see usage
 Use 'exit' to exit program
 '''
 
-coaches = {}
-teams = {}
+#@TODO
+# 1. if chronological order for commands matter, then fix coaches_by_name to only use coaches 
+# 2. search_coaches needs to be fixed based on the all fields that are being searched for, not just the first field
+# 3. Run through test cases again to make sure everything is working properly
 
-import sys
+#initialize list data structure
+coaches = []
+teams = []
 
+#importing functions from coaches.py and teams.py
 from coaches import add_coach
 from coaches import load_coaches
 from coaches import print_coaches
@@ -41,16 +47,16 @@ def main_loop():
             print("Commands:                      Arguments:")
             print("add_coach                      ID SEASON FIRST_NAME LAST_NAME SEASON_WIN SEASON_LOSS PLAYOFF_WIN PLAYOFF_LOSS TEAM")
             print("add_team                       ID LOCATION NAME LEAGUE")
-            print("load_coaches")
-            print("load_team")
+            print("load_coaches                   FILENAME")
+            print("load_teams                     FILENAME")
             print("print_coaches")
             print("print_teams")
             print("coaches_by_name                LAST_NAME")
             print("teams_by_city                  CITY_NAME")
             print("best_coach")
-            print("search_coaches                 field=VALUE")
-            break
-
+            print("search_coaches                 field=value1, field=value2, ...")
+            sys.exit(1)
+ 
         elif sys.argv[0] == 'exit' and len(sys.argv) == 1:
             print("Exiting... goodbye!")
             sys.exit(1)
@@ -58,7 +64,7 @@ def main_loop():
         elif sys.argv[0] == 'add_coach':
             #if command line arguments are not 10, then print usage and exit
             if len(sys.argv) != 10:
-                print("Usage: add_coach coachid season firstname lastname season_win season_loss playoff_win playoff_loss team")
+                print("Usage: add_coach ID SEASON FIRST_NAME LAST_NAME SEASON_WIN SEASON_LOSS PLAYOFF_WIN PLAYOFF_LOSS TEAM")
                 sys.exit(1)
             
             add_coach(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], coaches)
@@ -67,26 +73,26 @@ def main_loop():
         elif sys.argv[0] == 'add_team':
             
             if len(sys.argv) != 5:
-                print("Usage: add_team teamid location name league")
+                print("Usage: add_team ID LOCATION NAME LEAGUE")
                 sys.exit(1)
 
             add_team(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], teams)
             
-        elif sys.argv[0] == 'load_coach':
+        elif sys.argv[0] == 'load_coaches':
 
-            if len(sys.argv) != 1:
-                print("Usage: load_coach")
+            if len(sys.argv) != 2:
+                print("Usage: load_coaches FILENAME")
                 sys.exit(1)
 
-            load_coaches()
+            load_coaches(sys.argv[1], coaches)
 
-        elif sys.argv[0] == 'load_team':
+        elif sys.argv[0] == 'load_teams':
             
-            if len(sys.argv) != 1:
-                print("Usage: python3 main.py load_team")
+            if len(sys.argv) != 2:
+                print("Usage: load_teams FILENAME")
                 sys.exit(1)
 
-            load_teams()
+            load_teams(sys.argv[1], teams)
 
         elif sys.argv[0] == 'print_coaches':
 
@@ -106,35 +112,45 @@ def main_loop():
 
         elif sys.argv[0] == 'coaches_by_name':
 
-            if len(sys.argv) != 3:
-                print("Usage: python3 main.py coaches_by_name lastname")
+            if len(sys.argv) < 2 or len(sys.argv) > 3:
+                print("Usage: coaches_by_name LASTNAME")
                 sys.exit(1)
-
-            coaches_by_name(sys.argv[2])
+            
+            #last name can be 1 or 2 words, so we need to check if there are 2 words
+            if len(sys.argv) == 2:
+                lastname = sys.argv[1]
+            else:
+                lastname = sys.argv[1] + " " + sys.argv[2]
+            
+            coaches_by_name(lastname, coaches, teams)
 
         elif sys.argv[0] == 'teams_by_city':
 
-            if len(sys.argv) != 3:
-                print("Usage: python3 main.py teams_by_city cityname")
+            if len(sys.argv) != 2:
+                print("Usage: teams_by_city CITYNAME")
                 sys.exit(1)
 
-            teams_by_city(sys.argv[2])
+            teams_by_city(sys.argv[1], coaches, teams)
 
         elif sys.argv[0] == 'best_coach':
 
             if len(sys.argv) != 2:
-                print("Usage: python3 main.py best_coach")
+                print("Usage: best_coach SEASON")
                 sys.exit(1)
 
-            best_coach()
+            best_coach(sys.argv[1], coaches)
 
         elif sys.argv[0] == 'search_coaches':
 
-            if len(sys.argv) != 3:
-                print("Usage: python3 main.py search_coaches field=value")
+            if len(sys.argv) < 2:
+                print("Usage: search_coaches field1=value1 field2=value2 ...")
                 sys.exit(1)
-
-            search_coaches(sys.argv[2])
+            else:
+                fields = {}
+                for arg in sys.argv[1:]:
+                    field, value = arg.split("=")
+                    fields[field] = value
+                search_coaches(coaches, **fields)
 
         else:
             print("Invalid command. Use python3 main.py help to see usage")

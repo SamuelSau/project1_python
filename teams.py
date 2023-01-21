@@ -1,4 +1,4 @@
-teams = {}
+import csv
 
 def add_team(teamid, location, name, league, teams):
 
@@ -17,34 +17,39 @@ def add_team(teamid, location, name, league, teams):
     if not (league.isalpha() and len(league) == 1 and league.isupper()):
         raise ValueError("Invalid league")
 
-    #store into dictionary
-    teams[teamid] = {location, name, league}
-    
+    #store into tuple
+    teams.append((teamid, location, name, league))
+
     print("Team added to the database")
     return teams
 
-def load_teams():
-    with open("teams.txt", 'r') as f:
-        for line in f:
-            line = line.strip().split(',')
-            add_team(line[0], line[1], line[2], line[3])
-def print_teams(teams):
+def load_teams(filename, teams):
 
-    print(teams)
-    
-    return
+    # if filename != 'teams.txt':
+    #     raise ValueError('Invalid filename. Expected teams.txt')
+
+    with open(filename, 'r') as f:
+        reader = csv.reader(f)
+        next(reader) #skip first line
+        for row in reader:
+            teamid, location, name, league = [item.strip() for item in row]
+            teams.append((teamid, location, name, league))
+    return teams
+
+def print_teams(teams): 
+    for team in teams:
+        print("{:<4} {:<4} {:<4} {:<4}".format(team[0], team[1], team[2], team[3]))
+    return None
 
 def teams_by_city(cityname, coaches, teams):
     
-    #check if cityname is valid 
-    
-    
-    #access location in teams dictionary (cityname == location)
-    #access coaches dictionary
-    #query and print the information of teams in that city
-    #query and print the information of coaches of teams in that city (each coach in each line)
-    #e.g. cityname = Baltimore
-    #Bob Leonard, BAL,Baltimore,Bullets,N
-    #...
-    #Buddy,Jeannette,BA1,Baltimore,Bullets,N
-    pass
+    matching_teams = []
+    for team in teams:
+        if team[1] == cityname:
+            matching_teams.append(team)
+    for team in matching_teams:
+        team_id = team[0]
+        matching_coaches = {coach[3] for coach in coaches if coach[8] == team_id}
+        for coach in matching_coaches:
+            print(team[0], team[1], team[2], team[3], coach)
+    return None
