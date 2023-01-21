@@ -27,8 +27,8 @@ def add_coach(coachid, season, firstname, lastname, season_win, season_loss, pla
     if not (playoff_loss.isdigit() and int(playoff_loss) >= 0):
         raise ValueError("Playoff losses should be a non-negative integer")
 
-    if not (team.isalnum() and team.isupper() and len(team) == 3):
-        raise ValueError("Team should be capital letters and/or digits")
+    if not (team.isalnum() and team.isupper() and len(team) == 3) and (any(c.isupper() for c in team) and any(c.isdigit() for c in team)):
+         raise ValueError("Team should be capital letters and/or digits")
 
     #store most recent into a list using tuple and explicitly convert to int
     coaches.append((coachid, int(season), firstname, lastname, int(season_win), int(season_loss), int(playoff_win), int(playoff_loss), team))
@@ -37,17 +37,12 @@ def add_coach(coachid, season, firstname, lastname, season_win, season_loss, pla
 
 def load_coaches(filename, coaches):
 
-    #check if filename is valid
-    # if filename != 'coaches_season.txt':
-    #     raise ValueError('Invalid filename. Expected coaches_season.txt')
-
     with open(filename, 'r') as f:
         reader = csv.reader(f)
         next(reader) #skip first line
         for row in reader:
             coachid, year, _, firstname, lastname, season_win, season_loss, playoff_win, playoff_loss, team = [item.strip() for item in row]
             coaches.append((coachid, int(year), firstname, lastname, int(season_win), int(season_loss), int(playoff_win), int(playoff_loss), team))
-    
     return coaches
 
 def print_coaches(coaches):
@@ -58,19 +53,21 @@ def print_coaches(coaches):
         print("{:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4}".format(coach[0], coach[1], coach[2], coach[3], coach[4], coach[5], coach[6], coach[7], coach[8]))
     return None
 
-def coaches_by_name(lastname, coaches, teams):
-    #FIND COACHES BY LAST NAME IN COACHES
+def coaches_by_name(lastname, coaches):
+    
     for coach in coaches:
         #handle test cases where coach's last name has a + in it
         coach_lastname = lastname.replace('+', ' ')
         if coach_lastname == coach[3]:
-            
             team_id = coach[8]
-            team = [t for t in teams if t[0] == team_id][0]
-            location = team[1]
-            team_name = team[2]
-            print(coach[0], coach[1], coach[2], coach[3], coach[4], coach[5], coach[6], coach[7], coach[8], location, team_name)
-    
+            with open("t.txt", 'r') as teams_file:
+                for line in teams_file:
+                    team = line.strip().split(',')
+                    if team[0] == team_id:
+                        location = team[1]
+                        team_name = team[2]
+                        print(coach[0], coach[1], coach[2], coach[3], coach[4], coach[5], coach[6], coach[7], coach[8], location, team_name)
+                        break
     return None
 
 def best_coach(season, coaches):
@@ -87,49 +84,38 @@ def best_coach(season, coaches):
 
 def search_coaches(coaches, **fields):
     matching_coaches = []
-    for coach in coaches: 
+    for coach in coaches:
         match = True
-        for field, value in fields.items(): 
-            if field == 'coach_id':
-                if coach[0] != value:
-                    match = False
-    
-            if field == 'season':
-                if coach[1] != value:
-                    match = False
-                    
-            if field == 'firstname': 
-                if coach[2] != value: 
-                    match = False
-                    
-            if field == 'lastname':
-                if coach[3] != value:
-                    match = False
-                    
-            if field == 'season_wins':
-                if coach[4] != value:
-                    match = False
-                    
-            if field == 'season_losses':
-                if coach[5] != value:
-                    match = False
-                    
-            if field == 'playoff_wins':
-                if coach[6] != value:
-                    match = False
-                    
-            if field == 'playoff_losses':
-                if coach[7] != value:
-                    match = False
-                    
-            if field == 'team':
-                if coach[8] != value:
-                    match = False
-            
+        for field, value in fields.items():
+            if field == 'coach_id' and coach[0] != value:
+                match = False
+                break
+            elif field == 'season' and coach[1] != int(value):
+                match = False
+                break
+            elif field == 'firstname' and coach[2] != value:
+                match = False
+                break
+            elif field == 'lastname' and coach[3] != value:
+                match = False
+                break
+            elif field == 'season_win' and coach[4] != int(value):
+                match = False
+                break
+            elif field == 'season_losses' and coach[5] != int(value):
+                match = False
+                break
+            elif field == 'playoff_wins' and coach[6] != int(value):
+                match = False
+                break
+            elif field == 'playoff_losses' and coach[7] != int(value):
+                match = False
+                break
+            elif field == 'team' and coach[8] != value:
+                match = False
+                break
         if match:
             matching_coaches.append(coach)
-
     for coach in matching_coaches:
         print(coach)
-    
     return None

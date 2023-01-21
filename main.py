@@ -12,11 +12,6 @@ Use 'help' to see usage
 Use 'exit' to exit program
 '''
 
-#@TODO
-# 1. if chronological order for commands matter, then fix coaches_by_name to only use coaches 
-# 2. search_coaches needs to be fixed based on the all fields that are being searched for, not just the first field
-# 3. Run through test cases again to make sure everything is working properly
-
 #initialize list data structure
 coaches = []
 teams = []
@@ -122,7 +117,7 @@ def main_loop():
             else:
                 lastname = sys.argv[1] + " " + sys.argv[2]
             
-            coaches_by_name(lastname, coaches, teams)
+            coaches_by_name(lastname, coaches)
 
         elif sys.argv[0] == 'teams_by_city':
 

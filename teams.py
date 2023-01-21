@@ -2,11 +2,9 @@ import csv
 
 def add_team(teamid, location, name, league, teams):
 
-    print(teamid)
-
     #check if data is valid
-    if len(teamid) != 3 or (not teamid.isupper() and any(c.isalpha() for c in teamid)):
-        raise ValueError("Team Id should be less than 3 capital letters and two digits")
+    if not (teamid.isalnum() and teamid.isupper() and len(teamid) == 3) and (any(c.isupper() for c in teamid) and any(c.isdigit() for c in teamid)):
+        raise ValueError("Team Id should be capital letters and/or digits")
     
     if not (location.isalpha() and location.replace(' ','').isalpha()):
         raise ValueError("Invalid location")
@@ -24,9 +22,6 @@ def add_team(teamid, location, name, league, teams):
     return teams
 
 def load_teams(filename, teams):
-
-    # if filename != 'teams.txt':
-    #     raise ValueError('Invalid filename. Expected teams.txt')
 
     with open(filename, 'r') as f:
         reader = csv.reader(f)
