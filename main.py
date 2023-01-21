@@ -63,8 +63,7 @@ def main_loop():
                 sys.exit(1)
             
             add_coach(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], coaches)
-            #RUSSEJO01 1946 John Russell 22 38 0 0 BOS 
-            #ROBERSC01 1981 Scotty Robertson 39 43 0 0 DET
+            
         elif sys.argv[0] == 'add_team':
             
             if len(sys.argv) != 5:
@@ -148,7 +147,7 @@ def main_loop():
                 search_coaches(coaches, **fields)
 
         else:
-            print("Invalid command. Use python3 main.py help to see usage")
+            print("Invalid command. Use help to see usage")
             sys.exit(1)
 
 if __name__ == '__main__':

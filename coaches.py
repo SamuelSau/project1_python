@@ -47,8 +47,6 @@ def load_coaches(filename, coaches):
 
 def print_coaches(coaches):
     
-    # for i in range(len(coaches)):
-    #     print(coaches[i])
     for coach in coaches:
         print("{:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4}".format(coach[0], coach[1], coach[2], coach[3], coach[4], coach[5], coach[6], coach[7], coach[8]))
     return None
