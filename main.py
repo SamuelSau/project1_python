@@ -66,11 +66,16 @@ def main_loop():
             
         elif sys.argv[0] == 'add_team':
             
-            if len(sys.argv) != 5:
+            if len(sys.argv) < 5 or len(sys.argv) > 6:
                 print("Usage: add_team ID LOCATION NAME LEAGUE")
                 sys.exit(1)
 
-            add_team(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], teams)
+            elif len(sys.argv) == 5: #location is 1 word
+                add_team(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], teams)
+
+            elif len(sys.argv) == 6: #location is 2 words
+                location = sys.argv[2] + " " + sys.argv[3]
+                add_team(sys.argv[1], location, sys.argv[4], sys.argv[5], teams)
             
         elif sys.argv[0] == 'load_coaches':
 

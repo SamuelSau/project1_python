@@ -6,7 +6,7 @@ def add_team(teamid, location, name, league, teams):
     if not (teamid.isalnum() and teamid.isupper() and len(teamid) == 3) and (any(c.isupper() for c in teamid) and any(c.isdigit() for c in teamid)):
         raise ValueError("Team Id should be capital letters and/or digits")
     
-    if not (location.isalpha() and location.replace(' ','').isalpha()):
+    if not (location.replace(' ','').isalpha()):
         raise ValueError("Invalid location")
     
     if not (name.isalpha() and name.replace(' ','').isalpha()):
